@@ -1,0 +1,18 @@
++++
+title = "Git for scientists"
+
+date = 2018-07-01
+lastmod = 2018-07-01
+draft = false
+
+tags = ["git", "code", "software"]
+summary = "A tool for source control, collaborative editing, and archiving"
+abstract = "A tool for source control, collaborative editing, and archiving"
+authors = ["Vassilis Kehayas"]
+hasPlotly = false
+doi = ""
+sourceFile = "src/git-intro.Rmd"
+
++++
+
+

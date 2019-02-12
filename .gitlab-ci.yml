@@ -1,0 +1,129 @@
+stages:
+  - test
+  - deploy
+
+image: vkehayas/alpine-r-doc-plot:1.1.1
+
+variables:
+  MRAN_BUILD_DATE: '2019-02-13' # MRAN snapshot to use
+
+before_script:
+  ##
+  ## Install ssh-agent if not already installed, it is required by Docker.
+  ## (change apt-get to yum if you use an RPM-based image)
+  ##
+  - 'apk update && apk add openssh-client && apk add git && apk add bash'
+  ## - apk update && apk add openssh-client git
+  ## - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+
+  ##
+  ## Run ssh-agent (inside the build environment)
+  ##
+  - eval $(ssh-agent -s)
+
+  ##
+  ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  ## We're using tr to fix line endings which makes ed25519 keys work
+  ## without extra base64 encoding.
+  ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
+  ##
+  - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+  ## - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+
+  ##
+  ## Create the SSH directory and give it the right permissions
+  ##
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+
+  ##
+  ## Use ssh-keyscan to scan the keys of your private server. Replace gitlab.com
+  ## with your own domain name. You can copy and repeat that command if you have
+  ## more than one server to connect to.
+  ##
+  - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
+  ##
+  ## Alternatively, assuming you created the SSH_SERVER_HOSTKEYS variable
+  ## previously, uncomment the following two lines instead.
+  ##
+  #- echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
+  #- chmod 644 ~/.ssh/known_hosts
+
+  ##
+  ## You can optionally disable host key checking. Be aware that by adding that
+  ## you are suspectible to man-in-the-middle attacks.
+  ## WARNING: Use this only with the Docker executor, if you use it with shell
+  ## you will overwrite your user's SSH config.
+  ##
+  #- '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  ##
+  ## Optionally, if you will be using any Git commands, set the user name and
+  ## email.
+  ##
+  - git config --global user.email "$GITLAB_USER_EMAIL"
+  - git config --global user.name "$GITLAB_USER_NAME"
+
+
+test:
+  stage: test
+  except:
+    variables:
+      - $CI_COMMIT_TITLE == "CI commit"
+  script:
+
+    # try to connect to GitLab.com
+    - ssh git@gitlab.com
+
+    # try to clone yourself. A *PUBLIC* key paired to the SSH_PRIVATE_KEY was added as deploy key to this repository
+    - git clone git@gitlab.com:"$CI_PROJECT_PATH".git
+
+    # Check default R path
+    - Rscript -e "getwd();
+                  setwd('$CI_PROJECT_NAME');
+                  getwd();
+                  writeLines('test', 'spam.txt');
+                  system('ls -la')"
+
+    # Check access to MRAN (https://github.com/RevolutionAnalytics/checkpoint)
+    - Rscript -e "setwd('$CI_PROJECT_NAME');
+                  cranRepo = 'https://cloud.r-project.org/';
+                  buildDate0 = '$MRAN_BUILD_DATE';
+                  install.packages('checkpoint', repos = cranRepo);
+                  system('mkdir /root/.checkpoint');
+                  library(checkpoint);
+                  checkpoint(buildDate0)"
+
+    # Test git commit
+    - cd "$CI_PROJECT_NAME"
+    - git add .
+    - git commit -m "Test commit"
+
+    # Declare success
+    - echo All tests have succeeded!
+
+
+deploy:
+  stage: deploy
+  except:
+    variables:
+      - $CI_COMMIT_TITLE == "CI commit"
+  script:
+    - bash
+    - git clone git@gitlab.com:"$CI_PROJECT_PATH".git
+    - Rscript -e "cranRepo = 'https://cloud.r-project.org/';
+                  buildDate = '$MRAN_BUILD_DATE';
+                  install.packages('checkpoint', repos = cranRepo);
+                  system('mkdir /root/.checkpoint');
+                  library(checkpoint);
+                  checkpoint(buildDate);
+                  library(rmarkdown);
+                  setwd('$CI_PROJECT_NAME/src');
+                  render('$CI_PROJECT_NAME.Rmd', output_file = 'index.md');
+                  source('ProcessRmd.R')"
+    - cd $CI_PROJECT_NAME
+    - git add .
+    - git commit -m "CI commit"
+    - git push -u origin master
