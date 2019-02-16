@@ -337,9 +337,9 @@ ls -la
 
 ```
 ## total 24
-## drwxr-xr-x    3 root     root          4096 Feb 13 00:04 .
-## drwxr-xr-x    3 root     root          4096 Feb 13 00:04 ..
-## drwxr-xr-x    7 root     root          4096 Feb 13 00:04 .git
+## drwxr-xr-x    3 root     root          4096 Feb 16 19:59 .
+## drwxr-xr-x    3 root     root          4096 Feb 16 19:59 ..
+## drwxr-xr-x    7 root     root          4096 Feb 16 19:59 .git
 ```
 
 If you ever delete this hidden folder 
@@ -435,7 +435,7 @@ git commit -m "Include spam"
 ```
 
 ```
-## [master (root-commit) 5247348] Include spam
+## [master (root-commit) f5776ee] Include spam
 ##  1 file changed, 1 insertion(+)
 ##  create mode 100644 test.txt
 ```
@@ -457,7 +457,7 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 ```
 
 ```
-## * 5247348 <Vassilis Kehayas> Include spam (HEAD -> master)
+## * f5776ee <Vassilis Kehayas> Include spam (HEAD -> master)
 ```
 
 There is an art to writing descriptive yet concise Git commit messages.
@@ -555,7 +555,7 @@ git commit -am "Include asinine statement"
 ```
 
 ```
-## [develop 709f1f0] Include asinine statement
+## [develop 4352f08] Include asinine statement
 ##  1 file changed, 1 insertion(+)
 ```
 
@@ -584,13 +584,16 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 ```
 
 ```
-## * 709f1f0 <Vassilis Kehayas> Include asinine statement (HEAD -> develop)
-## * 5247348 <Vassilis Kehayas> Include spam (master)
+## * 4352f08 <Vassilis Kehayas> Include asinine statement (HEAD -> develop)
+## * f5776ee <Vassilis Kehayas> Include spam (master)
 ```
 
 and then `checkout` the commit that corresponds 
 to the version we are looking for:
-`git checkout 5247348 test.txt`.
+`git checkout f5776ee test.txt`.
+To revert more than one files at the same time
+some care should be taken to avoid the 
+[dreaded "detached head" state](https://www.atlassian.com/git/tutorials/undoing-changes).
 
 To revert back to the latest state of the file Git has recorded
 we simply `checkout` the branch's `HEAD`
@@ -612,7 +615,7 @@ git merge develop
 
 ```
 ## Switched to branch 'master'
-## Updating 5247348..709f1f0
+## Updating f5776ee..4352f08
 ## Fast-forward
 ##  test.txt | 1 +
 ##  1 file changed, 1 insertion(+)
@@ -623,8 +626,8 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 ```
 
 ```
-## * 709f1f0 <Vassilis Kehayas> Include asinine statement (HEAD -> master, develop)
-## * 5247348 <Vassilis Kehayas> Include spam
+## * 4352f08 <Vassilis Kehayas> Include asinine statement (HEAD -> master, develop)
+## * f5776ee <Vassilis Kehayas> Include spam
 ```
 
 Here we merged a local branch to another local branch stored in the same machine.
