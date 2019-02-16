@@ -385,6 +385,9 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 and then `checkout` the commit that corresponds 
 to the version we are looking for:
 ``r paste("git", paste("checkout", hash0, "test.txt"))``.
+To revert more than one files at the same time
+some care should be taken to avoid the 
+[dreaded "detached head" state](https://www.atlassian.com/git/tutorials/undoing-changes).
 
 To revert back to the latest state of the file Git has recorded
 we simply `checkout` the branch's `HEAD`
