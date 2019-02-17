@@ -10,7 +10,7 @@ summary = "A tool for source control, collaborative editing, and archiving"
 abstract = "A tool for source control, collaborative editing, and archiving"
 authors = ["Vassilis Kehayas"]
 hasPlotly = false
-doi = ""
+doi = "10.5281/zenodo.2567578"
 sourceFile = "src/git-intro.Rmd"
 
 +++
