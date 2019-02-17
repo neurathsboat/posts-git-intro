@@ -1,8 +1,8 @@
 +++
 title = "Git for scientists"
 
-date = 2018-07-01
-lastmod = 2018-07-01
+date = 2019-02-17
+lastmod = 2019-02-17
 draft = false
 
 tags = ["git", "code", "software"]
@@ -10,7 +10,7 @@ summary = "A tool for source control, collaborative editing, and archiving"
 abstract = "A tool for source control, collaborative editing, and archiving"
 authors = ["Vassilis Kehayas"]
 hasPlotly = false
-doi = ""
+doi = "10.5281/zenodo.2567578"
 sourceFile = "src/git-intro.Rmd"
 
 +++
@@ -337,9 +337,9 @@ ls -la
 
 ```
 ## total 24
-## drwxr-xr-x    3 root     root          4096 Feb 16 19:59 .
-## drwxr-xr-x    3 root     root          4096 Feb 16 19:59 ..
-## drwxr-xr-x    7 root     root          4096 Feb 16 19:59 .git
+## drwxr-xr-x    3 root     root          4096 Feb 17 21:43 .
+## drwxr-xr-x    3 root     root          4096 Feb 17 21:43 ..
+## drwxr-xr-x    7 root     root          4096 Feb 17 21:43 .git
 ```
 
 If you ever delete this hidden folder 
@@ -435,7 +435,7 @@ git commit -m "Include spam"
 ```
 
 ```
-## [master (root-commit) f5776ee] Include spam
+## [master (root-commit) 2dfd064] Include spam
 ##  1 file changed, 1 insertion(+)
 ##  create mode 100644 test.txt
 ```
@@ -457,7 +457,7 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 ```
 
 ```
-## * f5776ee <Vassilis Kehayas> Include spam (HEAD -> master)
+## * 2dfd064 <Neurath's boat> Include spam (HEAD -> master)
 ```
 
 There is an art to writing descriptive yet concise Git commit messages.
@@ -555,7 +555,7 @@ git commit -am "Include asinine statement"
 ```
 
 ```
-## [develop 4352f08] Include asinine statement
+## [develop 5104b5e] Include asinine statement
 ##  1 file changed, 1 insertion(+)
 ```
 
@@ -584,13 +584,13 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 ```
 
 ```
-## * 4352f08 <Vassilis Kehayas> Include asinine statement (HEAD -> develop)
-## * f5776ee <Vassilis Kehayas> Include spam (master)
+## * 5104b5e <Neurath's boat> Include asinine statement (HEAD -> develop)
+## * 2dfd064 <Neurath's boat> Include spam (master)
 ```
 
 and then `checkout` the commit that corresponds 
 to the version we are looking for:
-`git checkout f5776ee test.txt`.
+`git checkout 2dfd064 test.txt`.
 To revert more than one files at the same time
 some care should be taken to avoid the 
 [dreaded "detached head" state](https://www.atlassian.com/git/tutorials/undoing-changes).
@@ -615,7 +615,7 @@ git merge develop
 
 ```
 ## Switched to branch 'master'
-## Updating f5776ee..4352f08
+## Updating 2dfd064..5104b5e
 ## Fast-forward
 ##  test.txt | 1 +
 ##  1 file changed, 1 insertion(+)
@@ -626,8 +626,8 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 ```
 
 ```
-## * 4352f08 <Vassilis Kehayas> Include asinine statement (HEAD -> master, develop)
-## * f5776ee <Vassilis Kehayas> Include spam
+## * 5104b5e <Neurath's boat> Include asinine statement (HEAD -> master, develop)
+## * 2dfd064 <Neurath's boat> Include spam
 ```
 
 Here we merged a local branch to another local branch stored in the same machine.
