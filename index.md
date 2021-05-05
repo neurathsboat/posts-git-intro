@@ -337,9 +337,9 @@ ls -la
 
 ```
 ## total 24
-## drwxr-xr-x    3 root     root          4096 Feb 17 21:43 .
-## drwxr-xr-x    3 root     root          4096 Feb 17 21:43 ..
-## drwxr-xr-x    7 root     root          4096 Feb 17 21:43 .git
+## drwxr-xr-x    3 root     root          4096 May  5 14:49 .
+## drwxr-xr-x    3 root     root          4096 May  5 14:49 ..
+## drwxr-xr-x    7 root     root          4096 May  5 14:49 .git
 ```
 
 If you ever delete this hidden folder 
@@ -435,7 +435,7 @@ git commit -m "Include spam"
 ```
 
 ```
-## [master (root-commit) 2dfd064] Include spam
+## [master (root-commit) 45a7d96] Include spam
 ##  1 file changed, 1 insertion(+)
 ##  create mode 100644 test.txt
 ```
@@ -457,7 +457,7 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 ```
 
 ```
-## * 2dfd064 <Neurath's boat> Include spam (HEAD -> master)
+## * 45a7d96 <Vassilis Kehayas> Include spam (HEAD -> master)
 ```
 
 There is an art to writing descriptive yet concise Git commit messages.
@@ -555,7 +555,7 @@ git commit -am "Include asinine statement"
 ```
 
 ```
-## [develop 5104b5e] Include asinine statement
+## [develop 1142a49] Include asinine statement
 ##  1 file changed, 1 insertion(+)
 ```
 
@@ -584,13 +584,13 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 ```
 
 ```
-## * 5104b5e <Neurath's boat> Include asinine statement (HEAD -> develop)
-## * 2dfd064 <Neurath's boat> Include spam (master)
+## * 1142a49 <Vassilis Kehayas> Include asinine statement (HEAD -> develop)
+## * 45a7d96 <Vassilis Kehayas> Include spam (master)
 ```
 
 and then `checkout` the commit that corresponds 
 to the version we are looking for:
-`git checkout 2dfd064 test.txt`.
+`git checkout 45a7d96 test.txt`.
 To revert more than one files at the same time
 some care should be taken to avoid the 
 [dreaded "detached head" state](https://www.atlassian.com/git/tutorials/undoing-changes).
@@ -615,7 +615,7 @@ git merge develop
 
 ```
 ## Switched to branch 'master'
-## Updating 2dfd064..5104b5e
+## Updating 45a7d96..1142a49
 ## Fast-forward
 ##  test.txt | 1 +
 ##  1 file changed, 1 insertion(+)
@@ -626,8 +626,8 @@ git log --graph --pretty=format:'%h <%an> %s%d'
 ```
 
 ```
-## * 5104b5e <Neurath's boat> Include asinine statement (HEAD -> master, develop)
-## * 2dfd064 <Neurath's boat> Include spam
+## * 1142a49 <Vassilis Kehayas> Include asinine statement (HEAD -> master, develop)
+## * 45a7d96 <Vassilis Kehayas> Include spam
 ```
 
 Here we merged a local branch to another local branch stored in the same machine.
